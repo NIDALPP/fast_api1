@@ -16,13 +16,13 @@ get_db=database.get_db
 def create_category(request: schemas.CategoryCreate, db: Session = Depends(get_db),current_user:schemas.User=Depends(oauth2.get_admin_user)):
     return category.create_category(db, request)
 
-@router.get('/',response_model=List[schemas.CategoryBase])
-def all(db: Session=Depends(get_db)):
+@router.get('/',response_model=List[schemas.CategoryBase],)
+def all(db: Session=Depends(get_db),current_user:schemas.User=Depends(oauth2.get_admin_user)):
     return category.get_all(db)
 
 @router.delete('/{id}', status_code=status.HTTP_204_NO_CONTENT)
-def destroy(id:int,db: Session=Depends(get_db)):
+def destroy(id:int,db: Session=Depends(get_db),current_user:schemas.User=Depends(oauth2.get_admin_user)):
     return category.destroy(id,db)
 @router.put('/{id}',status_code=status.HTTP_202_ACCEPTED)
-def update(id:int,request:schemas.CategoryBase,db: Session=Depends(get_db)):
-    return category.destroy(id,request,db)
+def update(id:int,request:schemas.CategoryBase,db: Session=Depends(get_db),current:schemas.User=Depends(oauth2.get_customer_user)):
+    return category.update(id,request,db)

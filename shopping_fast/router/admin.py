@@ -7,8 +7,8 @@ from typing import List
 
 
 router=APIRouter(
-    prefix='/admin',
-    tags=['admin']
+    prefix='/user',
+    tags=['USER']
 )
 
 get_db=database.get_db
