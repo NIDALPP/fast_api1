@@ -1,34 +1,40 @@
-from pydantic import BaseModel
+from pydantic import BaseModel,EmailStr
 from typing import List,Optional
 
-class Admin(BaseModel):
+
+class User(BaseModel):
     name:str
-    admin_id:int
-    email:str
+    email:EmailStr
     password:str
     role:str
+    phone:int
+    address:str
     
     
-class ShowAdmin(BaseModel):
+class ShowUser(BaseModel):
     admin_id:int
     name:str
-    email:str
+    email:EmailStr
     role:str
+    phone:int
+    address:str
     class Config():
         from_attribute=True
     
-    
 class CategoryBase(BaseModel):
     name: str
+    parent_category_id:Optional[int]=None
+    active:bool=True
+
     
     
 
 class CategoryCreate(CategoryBase):
+    
     pass
 
 class Category(CategoryBase):
-    cat_id: int
-
+    cat_id:int
     class Config:
         from_attribute = True
     
@@ -36,7 +42,7 @@ class Category(CategoryBase):
 class productBase(BaseModel):
     name:str
     price:float
-    cat_name:str
+    cat_id:str
     stock:int
     description:Optional[str]=None
     
@@ -50,4 +56,10 @@ class Product(productBase):
     class config:
         from_attribute=True
     
-    
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    email: Optional[EmailStr] = None

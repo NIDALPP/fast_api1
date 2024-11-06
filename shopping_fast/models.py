@@ -1,37 +1,28 @@
-from sqlalchemy import Column,Integer,String,ForeignKey
+from sqlalchemy import Column,Integer,String,ForeignKey,Boolean,Enum
 from .database import Base
 from sqlalchemy.orm import relationship
 
 
-class Admin(Base):
-    __tablename__='Admin'
-    admin_id=Column(Integer,primary_key=
-                    True,index=True)
-    name=Column(String)
-    email=Column(String(100),unique=True)
-    password=Column(String(12))
-    role=Column(String(100))
-    
-    
-    
-    # Admin=relationship("cust",back_populates="Admin")
-    
+class User(Base):
+    __tablename__='user'
+    admin_id=Column(Integer,primary_key=True,index=True)
+    name=Column(String,unique=True)
+    email=Column(String,unique=True)
+    password=Column(String)
+    role=Column(String)
+    phone=Column(Integer,unique=True)
+    address=Column(String)
+    image_url=Column(String)
 
-# class Customer(Base):
-#     __tablename__='Customer'
-    
-#     c_id=Column(Integer,primary_key=
-#                     True,index=True)
-#     name=Column(String)
-#     email=Column(String,unique=True)
-#     address=Column(String)
-    
 
 class Category(Base):
     __tablename__='Category'
-    cat_id=Column(Integer,index=True)
-    name=Column(String,primary_key=True,unique=True)
+    cat_id=Column(Integer,primary_key=True,index=True,autoincrement=True)
+    name=Column(String,unique=True)
+    active=Column(Boolean)
+    parent_category_id=Column(Integer, ForeignKey('Category.cat_id'), nullable=True)
     
+    parent_category = relationship("Category", remote_side=[cat_id])
     
 class Products(Base):
     __tablename__='Products'
@@ -40,7 +31,7 @@ class Products(Base):
     price=Column(Integer)
     description=Column(String)
     stock=Column(Integer)
-    cat_name=Column(Integer,ForeignKey('Category.name'))
+    cat_id=Column(Integer,ForeignKey('Category.cat_id'))
     
     category=relationship("Category")
     
