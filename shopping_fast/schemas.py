@@ -25,10 +25,6 @@ class CategoryBase(BaseModel):
     name: str
     parent_category_id:Optional[int]=None
     active:bool=True
-
-    
-    
-
 class CategoryCreate(CategoryBase):
     
     pass
