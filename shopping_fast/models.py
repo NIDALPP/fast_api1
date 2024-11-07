@@ -20,8 +20,7 @@ class Category(Base):
     cat_id=Column(Integer,primary_key=True,index=True,autoincrement=True)
     name=Column(String,unique=True)
     active=Column(Boolean)
-    parent_category_id=Column(Integer, ForeignKey('Category.cat_id'), nullable=True)
-    
+    parent_category_id=Column(Integer, ForeignKey('Category.cat_id'), nullable=True)    
     parent_category = relationship("Category", remote_side=[cat_id])
     
 class Products(Base):
@@ -29,8 +28,10 @@ class Products(Base):
     product_id=Column(Integer,primary_key=True,index=True)
     name=Column(String)
     price=Column(Integer)
+    currency=Column(String)
+    brand=Column(String)
     description=Column(String)
-    stock=Column(Integer)
+    quantity=Column(Integer)
     cat_id=Column(Integer,ForeignKey('Category.cat_id'))
     
     category=relationship("Category")
