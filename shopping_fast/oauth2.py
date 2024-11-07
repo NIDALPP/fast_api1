@@ -2,12 +2,7 @@ from fastapi import Depends,HTTPException,status
 from fastapi.security import OAuth2PasswordBearer
 from . import token
 
-
-
-
-
 oauth2_admin_scheme = OAuth2PasswordBearer(tokenUrl="admin/login")
-
 
 def get_admin_user(data: str=Depends(oauth2_admin_scheme)):
     credentials_exception = HTTPException(
@@ -19,7 +14,3 @@ def get_admin_user(data: str=Depends(oauth2_admin_scheme)):
     if user["role"]!="ADMIN":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,detail="You are not an admin")
     return user
-
-
-
-

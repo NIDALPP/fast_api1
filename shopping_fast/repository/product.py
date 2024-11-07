@@ -3,7 +3,8 @@ from .. import models,schemas
 from fastapi import HTTPException,status
 
 def create_product(db:Session,request: schemas.ProductCreate):
-    new_product = models.Products(name=request.name,price=request.price,description=request.description,cat_id=request.cat_id,brand=request.brand,currency=request.currency,quantity=request.quantity)
+    new_product = models.Products(name=request.name,price=request.price,description=request.description,
+                                image_url=request.image_url,cat_id=request.cat_id,brand=request.brand,currency=request.currency,quantity=request.quantity,thumbnail=request.thumbnail)
     db.add(new_product)
     db.commit()
     db.refresh(new_product)

@@ -9,15 +9,12 @@ class User(BaseModel):
     role:str
     phone:int
     address:str
-    
-    
+    image_url:list
 class ShowUser(BaseModel):
-    admin_id:int
-    name:str
     email:EmailStr
+    password:str
+    user_id:int
     role:str
-    phone:int
-    address:str
     class Config():
         from_attribute=True
     
@@ -25,6 +22,7 @@ class CategoryBase(BaseModel):
     name: str
     parent_category_id:Optional[int]=None
     active:bool=True
+    icon:list
 class CategoryCreate(CategoryBase):
     pass
 
@@ -43,7 +41,8 @@ class productBase(BaseModel):
     description:str
     quantity:int
     currency:str
-    
+    image_url:list
+    thumbnail:list
     
 class ProductCreate(productBase):
     pass
@@ -63,3 +62,18 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     email: Optional[EmailStr] = None
+    
+    
+class cartBase(BaseModel):
+    product_id:int
+    quantity:int
+    
+class cartCreate(cartBase):
+
+    pass
+
+class cart(cartBase):
+    # user_id:int
+    cart_id:int
+    class Config:
+        from_attribute = True 

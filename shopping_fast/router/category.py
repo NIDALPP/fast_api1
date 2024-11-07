@@ -13,15 +13,15 @@ router=APIRouter(
 get_db=database.get_db
 
 @router.post("/", response_model=schemas.Category)
-def create_category(request: schemas.CategoryCreate, db: Session = Depends(get_db)):
-    return category.create_category(db, request)
+def create_category(request: schemas.CategoryCreate, db: Session = Depends(get_db),current_user:schemas.User=Depends(oauth2.get_admin_user)):
+    return category.create_category(request,db)
 
 @router.get('/',response_model=List[schemas.Category],)
-def all(db: Session=Depends(get_db)):
+def all(db: Session=Depends(get_db),current_user:schemas.User=Depends(oauth2.get_admin_user)):
     return category.get_all(db)
 
 @router.delete('/{id}')
-def destroy(id:int,db: Session=Depends(get_db)):
+def destroy(id:int,db: Session=Depends(get_db),current_user:schemas.User=Depends(oauth2.get_admin_user)):
     return category.destroy(id,db)
 
 
@@ -29,14 +29,3 @@ def destroy(id:int,db: Session=Depends(get_db)):
 @router.put('/{id}',status_code=status.HTTP_202_ACCEPTED)
 def update(id:int,request:schemas.CategoryBase,db: Session=Depends(get_db),current_user:schemas.User=Depends(oauth2.get_admin_user)):
     return category.update(id,request,db)
-
-
-
-
-
-
-
-
-
-
-
