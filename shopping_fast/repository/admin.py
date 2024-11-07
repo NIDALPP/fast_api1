@@ -4,7 +4,7 @@ from fastapi import HTTPException,status
 from ..hashing import Hash
 
 
-def create(request: schemas.ShowUser,db: Session):
+def create(request: schemas.User,db: Session):
     if request.role not in ["ADMIN", "CUSTOMER"]:
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,detail="only ADMIN or CUSTOMER is accepted")
     new_admin = models.User(name=request.name, email=request.email, password=Hash.bcrypt(request.password),role=request.role,phone=request.phone,address=request.address)
@@ -19,7 +19,7 @@ def show_all(db: Session):
     return admin
 
 def destroy(id:int,db: Session):
-    adm=db.query(models.User).filter(models.User.admin_id==id)
+    adm=db.query(models.User).filter(models.User.user_id==id)
     if not adm.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"admin with the id {id} not found")
@@ -29,7 +29,7 @@ def destroy(id:int,db: Session):
 
 
 def update(db: Session,id:int,request: schemas.User):
-    adm=db.query(models.User).filter(models.User.admin_id==id)
+    adm=db.query(models.User).filter(models.User.user_id==id)
     if not adm.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f'admin with the id {id} not found')

@@ -4,7 +4,7 @@ from fastapi import HTTPException,status
 
 
 def create_category(db: Session, request: schemas.CategoryCreate):
-    db_category = models.Category(name=request.name,active=request.active,parent_category_id=request.parent_category_id)
+    db_category = models.Category(name=request.name,active=request.active,parent_category_id=request.parent_category_id,icon=request.icon)
     db.add(db_category)
     db.commit()
     db.refresh(db_category)
