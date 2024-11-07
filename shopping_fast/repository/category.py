@@ -22,15 +22,18 @@ def destroy(id:int,db: Session):
     cat.delete(synchronize_session=False)
     db.commit()
     return "done"    
+
+
+
+
+
+
 def update(id:int,request: schemas.CategoryBase,db: Session):
-    cat=db.query(models.Category).filter(models.Category.cat_id==id)
-    
-    if not cat.first():
+    cat=db.query(models.Category).filter(models.Category.cat_id==id).first()
+    if not cat:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f'admin with the id {id} not found')
     for key,value in request.dict().items():
         setattr(cat, key, value)
-        cat.update(request)
-        db.commit()
-        return "updated"
-    
+    db.commit()
+    return {"details":"updated successfully"}
