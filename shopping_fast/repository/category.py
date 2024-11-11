@@ -4,6 +4,8 @@ from fastapi import HTTPException,status
 
 
 def create_category(db: Session, request: schemas.CategoryCreate):
+    if isinstance(request.icon, list):
+        request.icon = ",".join(request.icon)
     db_category = models.Category(name=request.name,active=request.active,parent_category_id=request.parent_category_id,icon=request.icon)
     db.add(db_category)
     db.commit()

@@ -1,60 +1,70 @@
-from pydantic import BaseModel,EmailStr
-from typing import List,Optional
+from pydantic import BaseModel, EmailStr
+from typing import List, Optional
 
 
 class User(BaseModel):
-    name:str
-    email:EmailStr
-    password:str
-    role:str
-    phone:int
-    address:str
-    image_url:list
+    name: str
+    email: EmailStr
+    password: str
+    role: str
+    phone: int
+    address: str
+
+
 class ShowUser(BaseModel):
-    email:EmailStr
-    password:str
-    user_id:int
-    role:str
-    class Config():
-        from_attribute=True
-    
+    user_id: int
+    name: str
+    email: EmailStr
+    role: str
+    phone: int
+    address: str
+
+    class Config:
+        orm_mode = True
+
+
 class CategoryBase(BaseModel):
     name: str
-    parent_category_id:Optional[int]=None
-    active:bool=True
-    icon:list
+    parent_category_id: Optional[int] = None
+    icon: str
+    active: bool = True
+
+
 class CategoryCreate(CategoryBase):
     pass
 
+
 class Category(CategoryBase):
-    cat_id:int
-    parent_category_id:int
+    cat_id: int
+    parent_category_id: Optional[int]  # make Optional
+
     class Config:
-        from_attribute = True
-    
-    
-class productBase(BaseModel):
-    name:str
-    price:float
-    cat_id:int
-    brand:str
-    description:str
-    quantity:int
-    currency:str
-    image_url:list
-    thumbnail:list
-    
-class ProductCreate(productBase):
+        orm_mode = True
+
+
+class ProductBase(BaseModel):
+    name: str
+    price: float
+    cat_id: int
+    brand: str
+    description: str
+    quantity: int
+    currency: str
+    image_url: str
+    thumbnail: str
+
+
+class ProductCreate(ProductBase):
     pass
 
-class Product(productBase):
-    product_id:int
-    category:Optional[str]=None
-    class config:
-        from_attribute=True
-    
-    
-    
+
+class Product(ProductBase):
+    product_id: int
+
+    class Config:
+        orm_mode = True
+
+
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -62,18 +72,38 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     email: Optional[EmailStr] = None
-    
-    
-class cartBase(BaseModel):
-    product_id:int
-    quantity:int
-    
-class cartCreate(cartBase):
 
+
+
+class CartCreate(BaseModel):
+    user_id: int
     pass
 
-class cart(cartBase):
-    # user_id:int
-    cart_id:int
+
+class Cart(BaseModel):
+    cart_id: int
+    user_id: int
+
     class Config:
-        from_attribute = True 
+        orm_mode = True
+
+
+# class OrderProduct(BaseModel):
+#     product_id: int
+#     quantity: int
+    
+    
+class OrderProduct(BaseModel):
+    order_id: int
+    product_id: int
+
+
+class Order(BaseModel):
+    order_id: int
+    user_id: int
+    cart_id: int
+    total_amount: float
+    products: List[OrderProduct]
+
+    class Config:
+        orm_mode = True
