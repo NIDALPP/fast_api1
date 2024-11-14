@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from .. import models,schemas
 from fastapi import HTTPException,status
 
-def create_product(db:Session,request: schemas.ProductCreate):
+def create_product(db:Session,request: schemas.Product):
     new_product = models.Product(name=request.name,price=request.price,description=request.description,
                                 image_url=request.image_url,cat_id=request.cat_id,brand=request.brand,currency=request.currency,quantity=request.quantity,thumbnail=request.thumbnail)
     db.add(new_product)

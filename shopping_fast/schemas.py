@@ -9,7 +9,7 @@ class User(BaseModel):
     role: str
     phone: int
     address: str
-
+    
 
 class ShowUser(BaseModel):
     user_id: int
@@ -18,9 +18,8 @@ class ShowUser(BaseModel):
     role: str
     phone: int
     address: str
-
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class CategoryBase(BaseModel):
@@ -36,10 +35,10 @@ class CategoryCreate(CategoryBase):
 
 class Category(CategoryBase):
     cat_id: int
-    parent_category_id: Optional[int]  # make Optional
+    parent_category_id: Optional[int] 
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class ProductBase(BaseModel):
@@ -62,7 +61,7 @@ class Product(ProductBase):
     product_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class Token(BaseModel):
@@ -71,6 +70,7 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
+    user_id:Optional[int]=None
     email: Optional[EmailStr] = None
 
 
@@ -85,17 +85,44 @@ class Cart(BaseModel):
     user_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
-
-# class OrderProduct(BaseModel):
-#     product_id: int
-#     quantity: int
-    
-    
-class OrderProduct(BaseModel):
-    order_id: int
+class CartItemCreate(BaseModel):
     product_id: int
+    
+    quantity: int
+
+class CartItemUpdate(BaseModel):
+    quantity: int
+
+class ProductInCartItem(BaseModel):
+    product_id: int
+    name: str
+    price: float
+    currency: str
+
+    class Config:
+        from_attributes = True
+
+
+
+class CartItem(BaseModel):
+    cart_item_id: int
+    cart_id: int
+    user_id: int
+    product: ProductInCartItem
+    quantity: int
+
+    class Config:
+        from_attributes = True
+
+class OrderItem(BaseModel):
+    product_id: int
+    quantity: int
+    total_amount:float
+
+    class Config:
+        from_attributes = True
 
 
 class Order(BaseModel):
@@ -103,7 +130,5 @@ class Order(BaseModel):
     user_id: int
     cart_id: int
     total_amount: float
-    products: List[OrderProduct]
-
     class Config:
-        orm_mode = True
+        from_attributes = True
