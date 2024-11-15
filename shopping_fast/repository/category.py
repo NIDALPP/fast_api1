@@ -11,9 +11,7 @@ def create_category(db: Session, request: schemas.CategoryCreate):
     db.commit()
     db.refresh(db_category)
     return db_category
-# @router.post("/",response_model=schemas.Order)
-# def place_order(db: Session=Depends(get_db),user:models.User=Depends(oauth2.get_customer_user)):
-#     cart_items=()
+
 def get_all(db: Session):
     cat=db.query(models.Category).all()
     return cat

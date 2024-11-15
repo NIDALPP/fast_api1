@@ -4,10 +4,13 @@ from typing import List
 from .. import schemas, database, models, oauth2
 from ..repository import order
 
-router = APIRouter()
+router = APIRouter(
+    prefix='/add to cart',
+    tags=['cart ']
+)
 get_db = database.get_db
 
-@router.post("/add_to_cart")
+@router.post("/")
 def add_to_cart(
     product_id: int, 
     quantity: int, 
@@ -60,7 +63,7 @@ def update_cart_item(
     if not cart_item:
         raise HTTPException(status_code=404, detail="Cart item not found")
     
-    updated_item = cart_repo.update_cart_item(cart_item, quantity)
+    updated_item = cart_repo.update(cart_item, quantity)
     
     return {"message": "Product quantity updated", "cart_item": updated_item}
 

@@ -23,7 +23,7 @@ class User(Base):
     
     cart_items = relationship("CartItem", back_populates="user")
     
-    orders = relationship("Order", back_populates="user")
+    orders = relationship("Order", back_populates="user", foreign_keys="[Order.user_id]")
 
 class Category(Base):
     __tablename__ = 'categories'
@@ -88,7 +88,8 @@ class Order(Base):
     user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
     cart_id = Column(Integer, ForeignKey("carts.cart_id"), nullable=False)
     total_amount = Column(Float, nullable=False)
+    address = Column(String, nullable=False)
     user = relationship("User", back_populates="orders")
     cart = relationship("Cart", back_populates="orders")
-    cart_items = relationship("CartItem", back_populates="order")  # Ensure that cart_items is correctly defined here
+    cart_items = relationship("CartItem", back_populates="order") 
     products = relationship("Product", secondary=order_products, back_populates="orders")

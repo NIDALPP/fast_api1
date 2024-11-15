@@ -130,5 +130,6 @@ class Order(BaseModel):
     user_id: int
     cart_id: int
     total_amount: float
+    address:str
     class Config:
         from_attributes = True
