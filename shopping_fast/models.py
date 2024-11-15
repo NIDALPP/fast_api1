@@ -18,10 +18,12 @@ class User(Base):
     phone = Column(Integer, unique=True)
     address = Column(String)
     image_url = Column(String)
-
-    cart = relationship("Cart", uselist=False, back_populates="user")  # One cart per user
+    cart = relationship("Cart", uselist=False, back_populates="user")
     orders = relationship("Order", back_populates="user")
-
+    
+    cart_items = relationship("CartItem", back_populates="user")
+    
+    orders = relationship("Order", back_populates="user", foreign_keys="[Order.user_id]")
 
 class Category(Base):
     __tablename__ = 'categories'
@@ -60,19 +62,24 @@ class Cart(Base):
     user_id = Column(Integer, ForeignKey('users.user_id'), unique=True)
 
     user = relationship("User", back_populates="cart")
-    items = relationship("CartItem", back_populates="cart", cascade="all, delete-orphan")
     orders = relationship("Order", back_populates="cart")
-
+    cart_items = relationship("CartItem", back_populates="cart")  
 
 class CartItem(Base):
     __tablename__ = 'cart_items'
+    
     cart_item_id = Column(Integer, primary_key=True, index=True)
     cart_id = Column(Integer, ForeignKey('carts.cart_id'))
     product_id = Column(Integer, ForeignKey('products.product_id'))
     quantity = Column(Integer, nullable=False)
-
-    cart = relationship("Cart", back_populates="items")
+    user_id = Column(Integer, ForeignKey('users.user_id'))
+    order_id = Column(Integer, ForeignKey('orders.order_id')) 
+    
+    cart = relationship("Cart", back_populates="cart_items")
     product = relationship("Product", back_populates="cart_items")
+    user = relationship("User", back_populates="cart_items")
+    order = relationship("Order", back_populates="cart_items")  
+
 
 
 class Order(Base):
@@ -81,7 +88,8 @@ class Order(Base):
     user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
     cart_id = Column(Integer, ForeignKey("carts.cart_id"), nullable=False)
     total_amount = Column(Float, nullable=False)
-
+    address = Column(String, nullable=False)
     user = relationship("User", back_populates="orders")
     cart = relationship("Cart", back_populates="orders")
+    cart_items = relationship("CartItem", back_populates="order") 
     products = relationship("Product", secondary=order_products, back_populates="orders")

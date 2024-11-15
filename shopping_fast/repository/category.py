@@ -27,9 +27,6 @@ def destroy(id:int,db: Session):
 
 
 
-
-
-
 def update(id:int,request: schemas.CategoryBase,db: Session):
     cat=db.query(models.Category).filter(models.Category.cat_id==id).first()
     if not cat:
